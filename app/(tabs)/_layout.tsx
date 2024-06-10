@@ -23,17 +23,25 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Mon traitement',
+            title: 'Mon Traitement',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon name={focused ? 'medkit' : 'medkit-outline'} color={color} />
             ),
           }} />
         <Tabs.Screen
-          name="explore"
+          name="document"
           options={{
-            title: 'Explore',
+            title: 'Document',
             tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+              <TabBarIcon name={focused ? 'document-text' : 'document-text-outline'} color={color} />
+            ),
+          }} />
+        <Tabs.Screen
+          name="profil"
+          options={{
+            title: 'Mon Profil',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'person-circle' : 'person-circle-outline'} color={color} />
             ),
           }} />
       </Tabs></>
