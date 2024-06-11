@@ -1,94 +1,134 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform } from 'react-native';
+import { StyleSheet, Image, Platform, View, useWindowDimensions } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import Input from '@/components/Input';
+import ListAccordion from '@/components/ListAccordion';
+import { Chip, Divider, IconButton, List, Text } from 'react-native-paper';
+import React from 'react';
 
-export default function TabTwoScreen() {
+export default function Profile() {
+
+  const { width } = useWindowDimensions();
+
+  const [contacts, setContacts] = React.useState([]);
+  const [allergies, setAllergies] = React.useState([]);
+  const [isAllergyModified, setIsAllergyModified] = React.useState(false);
+  const [isContactsModified, setIsContactsModified] = React.useState(false);
+  const [newAllergy, setNewAllergy] = React.useState('');
+  const [newContact, setNewContact] = React.useState({ name: '', firstName: '', phoneNumber: '' });
+  const styles = createStyles(width);
+
+  const addAllergy = () => {
+    setAllergies(prevAllergies => [...prevAllergies, newAllergy]);
+    setNewAllergy('');
+  };
+
+  const addContact = () => {
+    setContacts(prevContacts => [...prevContacts, newContact]);
+    setNewContact({ name: '', firstName: '', phoneNumber: '' });
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText> library
-          to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
+
+      <Input label="Nom" />
+      <Input label="Prenom" />
+      <Input label="Email" />
+      <Input label="Matricule Sécurité social" />
+      <Input label="Medecin" />
+
+      <Divider />
+      <View style={styles.row}>
+        <Text>Allergies</Text>
+        <IconButton icon="plus" onPress={() => setIsAllergyModified(true)} />
+      </View>
+      <View style={styles.rowAdaptive}>
+        {isAllergyModified && (
+          <>
+            <Input
+              label="Nouvelle allergie"
+              value={newAllergy}
+              onChangeText={text => setNewAllergy(text)}
+            />
+          </>
+        )}
+      </View>
+
+      {isAllergyModified && (<>
+        <View style={[styles.rowCentered]} >
+          <IconButton icon="cancel" onPress={() => setIsAllergyModified(false)} iconColor='red' />
+          <IconButton icon="check" onPress={addAllergy} iconColor='green' />
+        </View>
+      </>)}
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
+        {allergies.map((allergy, index) => (
+          <Chip key={index} icon="information" onPress={() => console.log('Pressed')} style={{ marginRight: 10, marginBottom: 10 }}>
+            {allergy}
+          </Chip>
+        ))}
+      </View>
+
+      <Divider />
+      <View style={styles.row}>
+        <Text>Contacts</Text>
+        <IconButton icon="plus" onPress={() => setIsContactsModified(true)} />
+      </View>
+      <View style={styles.rowAdaptive}>
+
+        {isContactsModified && (
+          <>
+            <View style={styles.rowAdaptive}>
+              <Input
+                label="Nom"
+                value={newContact.name}
+                onChangeText={text => setNewContact({ ...newContact, name: text })}
+                style={styles.mobileInput}
+              />
+              <Input
+                label="Prénom"
+                value={newContact.firstName}
+                onChangeText={text => setNewContact({ ...newContact, firstName: text })}
+                style={styles.mobileInput}
+              />
+              <Input
+                label="Numéro de téléphone"
+                value={newContact.phoneNumber}
+                onChangeText={text => setNewContact({ ...newContact, phoneNumber: text })}
+                style={styles.mobileInput}
+              />
+
+            </View>
+          </>
+        )}
+      </View>
+
+      {isContactsModified && (<>
+        <View style={[styles.rowCentered]} >
+          <IconButton icon="cancel" onPress={() => setIsContactsModified(false)} iconColor='red' />
+          <IconButton icon="check" onPress={addContact} iconColor='green' />
+        </View>
+      </>)}
+
+      <View style={styles.row}>
+        {contacts.map((contact, index) => (
+          <Chip key={index} icon="phone" onPress={() => console.log('Pressed')} style={{ marginRight: 10, marginBottom: 10 }}>
+            {contact.name}, {contact.firstName}, {contact.phoneNumber}
+          </Chip>
+        ))}
+      </View>
     </ParallaxScrollView>
   );
 }
 
-const styles = StyleSheet.create({
+export const createStyles = (width)  => StyleSheet.create({
   headerImage: {
     color: '#808080',
     bottom: -90,
@@ -96,7 +136,41 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   titleContainer: {
-    flexDirection: 'row',
+    flexDirection: width < 768 ? 'column' : 'row',
     gap: 8,
+    ...Platform.select({
+      ios: {
+        flexDirection: 'column',
+      },
+      android: {
+
+        flexDirection: 'column',
+      },
+      default: {
+        // other platforms, web for example
+      },
+    }),
+
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap'
+  },
+  rowCentered: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
+  rowAdaptive: {
+    flexDirection: width < 768 ? 'column' : 'row',
+    alignItems: 'center'
+  },
+
+  mobileInput: {
+    marginRight: width > 768 ? 10 : 0,
+    width: width > 768 ? 200 : '100%'
+  }
 });
+

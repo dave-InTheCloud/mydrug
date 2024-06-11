@@ -17,8 +17,8 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-           <DailyTab />
-           <ListAccordion />
+      <DailyTab />
+      <ListAccordion />
 
     </ParallaxScrollView>
   );
