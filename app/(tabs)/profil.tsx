@@ -56,17 +56,18 @@ export default function Profile() {
               label="Nouvelle allergie"
               value={newAllergy}
               onChangeText={text => setNewAllergy(text)}
+              style={styles.mobileInput}
             />
           </>
         )}
-      </View>
 
-      {isAllergyModified && (<>
-        <View style={[styles.rowCentered]} >
-          <IconButton icon="cancel" onPress={() => setIsAllergyModified(false)} iconColor='red' />
-          <IconButton icon="check" onPress={addAllergy} iconColor='green' />
-        </View>
-      </>)}
+        {isAllergyModified && (<>
+          <View style={[styles.rowCentered]} >
+            <IconButton icon="cancel" onPress={() => setIsAllergyModified(false)} iconColor='red' />
+            <IconButton icon="check" onPress={addAllergy} iconColor='green' />
+          </View>
+        </>)}
+      </View>
 
       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
         {allergies.map((allergy, index) => (
@@ -108,14 +109,14 @@ export default function Profile() {
             </View>
           </>
         )}
-      </View>
 
-      {isContactsModified && (<>
-        <View style={[styles.rowCentered]} >
-          <IconButton icon="cancel" onPress={() => setIsContactsModified(false)} iconColor='red' />
-          <IconButton icon="check" onPress={addContact} iconColor='green' />
-        </View>
-      </>)}
+        {isContactsModified && (<>
+          <View style={[styles.rowCentered]} >
+            <IconButton icon="cancel" onPress={() => setIsContactsModified(false)} iconColor='red' />
+            <IconButton icon="check" onPress={addContact} iconColor='green' />
+          </View>
+        </>)}
+      </View>
 
       <View style={styles.row}>
         {contacts.map((contact, index) => (
@@ -128,7 +129,7 @@ export default function Profile() {
   );
 }
 
-export const createStyles = (width)  => StyleSheet.create({
+export const createStyles = (width) => StyleSheet.create({
   headerImage: {
     color: '#808080',
     bottom: -90,
