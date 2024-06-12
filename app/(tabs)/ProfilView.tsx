@@ -9,40 +9,115 @@ import { ThemedView } from '@/components/ThemedView';
 import Input from '@/components/Input';
 import ListAccordion from '@/components/ListAccordion';
 import { Chip, Divider, IconButton, List, Text } from 'react-native-paper';
-import React from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
-export default function Profile() {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ProfileService } from '../services/profile/ProfileService';
+import { profileReducer, initialState } from '../services/profile/ProfileReducer';
+
+export default function ProfileView() {
 
   const { width } = useWindowDimensions();
+  const styles = createStyles(width);
 
-  const [contacts, setContacts] = React.useState([]);
-  const [allergies, setAllergies] = React.useState([]);
   const [isAllergyModified, setIsAllergyModified] = React.useState(false);
   const [isContactsModified, setIsContactsModified] = React.useState(false);
   const [newAllergy, setNewAllergy] = React.useState('');
   const [newContact, setNewContact] = React.useState({ name: '', firstName: '', phoneNumber: '' });
-  const styles = createStyles(width);
+  const [newInfo, setInfo] = React.useState({ name: '', firstName: '', phoneNumber: '' });
 
-  const addAllergy = () => {
-    setAllergies(prevAllergies => [...prevAllergies, newAllergy]);
+  const [profile, dispatch] = useReducer(profileReducer, initialState);
+
+  const [text, setText] = React.useState("");
+
+  /*   const [profile, setProfile] = useState({
+      name: '',
+      firstName: '',
+      email: '',
+      phoneNumber: '',
+      birthDate: '',
+      address: '',
+      doctor: '',
+      allergies: [''],
+      contact: [],
+    }); */
+
+  const profileService = new ProfileService();
+
+  useEffect(() => {
+    profileService.getProfile().then(profile => {
+      if (profile) {
+        Object.keys(profile).forEach(key => {
+          dispatch({ type: 'updateProperty', payload: { property: key, value: profile[key] } });
+        });
+        dispatch({ type: 'updateProperty', payload: { property: 'allergies', value: profile.allergies } });
+        dispatch({ type: 'updateProperty', payload: { property: 'contact', value: profile.contact } });
+      }
+    });
+  }, []);
+
+  const addAllergy = async () => {
+    if (newAllergy) {
+      profile.allergies.push(newAllergy);
+      await profileService.setProfile(profile);
+    }
     setNewAllergy('');
   };
 
-  const addContact = () => {
-    setContacts(prevContacts => [...prevContacts, newContact]);
-    setNewContact({ name: '', firstName: '', phoneNumber: '' });
+  const addContact = async () => {
+    if (newContact.name && newContact.firstName && newContact.phoneNumber) {
+      profile.contact.push(newContact);
+      await profileService.setProfile(profile);
+      setNewContact({ name: '', firstName: '', phoneNumber: '' });
+    }
+  };
+
+  const handleInputChange = async (property: string, value: any) => {
+    profile[property] = value;
+    await profileService.setProfile(profile);
+    dispatch({ type: 'updateProperty', payload: profile });
   };
 
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
-
-      <Input label="Nom" />
-      <Input label="Prenom" />
-      <Input label="Email" />
-      <Input label="Matricule Sécurité social" />
-      <Input label="Medecin" />
+      <Input
+        label="Nom"
+        value={profile.name}
+        id="name"
+        handleChangeText={handleInputChange}
+      />
+      <Input
+        label="Prenom"
+        value={profile.firstName}
+        id="firstName"
+        handleChangeText={handleInputChange}
+      />
+      <Input
+        label="Née le"
+        value={profile.birthDate}
+        id="birthDate"
+        handleChangeText={handleInputChange}
+      />
+      <Input
+        label="Matricule Sécurité social"
+        value={profile.socialSecurityNumber}
+        id='socialSecurityNumber'
+        handleChangeText={handleInputChange}
+      />
+      <Input
+        label="Email"
+        value={profile.email}
+        id='email'
+        handleChangeText={handleInputChange}
+      />
+      <Input
+        label="Médecin"
+        value={profile.doctor}
+        id="doctor"
+        handleChangeText={handleInputChange}
+      />
 
       <Divider />
       <View style={styles.row}>
@@ -55,7 +130,7 @@ export default function Profile() {
             <Input
               label="Nouvelle allergie"
               value={newAllergy}
-              onChangeText={text => setNewAllergy(text)}
+              onChangeText={setNewAllergy}
               style={styles.mobileInput}
             />
           </>
@@ -70,12 +145,19 @@ export default function Profile() {
       </View>
 
       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
-        {allergies.map((allergy, index) => (
-          <Chip key={index} icon="information" onPress={() => console.log('Pressed')} style={{ marginRight: 10, marginBottom: 10 }}>
+        {profile.allergies.map((allergy, index) => (
+          <Chip
+            key={index}
+            icon="information"
+            onPress={() => console.log('Pressed')}
+            style={{ marginRight: 10, marginBottom: 10 }}
+          >
+            {console.log('allergy:', allergy)}
             {allergy}
           </Chip>
         ))}
       </View>
+
 
       <Divider />
       <View style={styles.row}>
@@ -119,8 +201,11 @@ export default function Profile() {
       </View>
 
       <View style={styles.row}>
-        {contacts.map((contact, index) => (
-          <Chip key={index} icon="phone" onPress={() => console.log('Pressed')} style={{ marginRight: 10, marginBottom: 10 }}>
+        {profile.contact && profile.contact.map((contact, index) => (
+          <Chip key={index} icon="phone"
+            onPress={() => console.log('Pressed')}
+            style={{ marginRight: 10, marginBottom: 10 }}
+          >
             {contact.name}, {contact.firstName}, {contact.phoneNumber}
           </Chip>
         ))}

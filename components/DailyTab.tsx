@@ -11,7 +11,7 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
 
     const buttons = [
         { value: 'Matin', label: 'Matin', icon: 'weather-sunset-up' },
-        { value: 'midi', label: 'midi', icon: 'weather-sunny' },
+        { value: 'Midi', label: 'Midi', icon: 'weather-sunny' },
         { value: 'Après-midi', label: 'Après-midi', icon: 'coffee' },
         { value: 'Soir', label: 'Soir', icon: 'weather-sunset-down' },
         { value: 'Coucher', label: 'Coucher', icon: 'bed' },
