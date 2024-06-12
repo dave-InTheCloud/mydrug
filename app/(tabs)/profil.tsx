@@ -86,7 +86,7 @@ export default function Profile() {
 
         {isContactsModified && (
           <>
-            <View style={styles.rowAdaptive}>
+            <View style={[styles.rowAdaptive, { width: width > 500 ? 'auto' : '100%' }]}>
               <Input
                 label="Nom"
                 value={newContact.name}
@@ -171,7 +171,7 @@ export const createStyles = (width) => StyleSheet.create({
 
   mobileInput: {
     marginRight: width > 768 ? 10 : 0,
-    width: width > 768 ? 200 : '100%'
+    width: width > 768 ? 'auto' : '100%',
   }
 });
 
