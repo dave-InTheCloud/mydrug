@@ -5,12 +5,7 @@ export const initialState = new Profile();
 export function profileReducer(state: Profile, action: { type: string; payload?: any }) {
     switch (action.type) {
         case 'updateProperty':
-            console.log('REducer', action.payload);
             return { ...state, [action.payload.property]: action.payload.value };
-        case 'addAllergy':
-            return { ...state, allergies: [...state.allergies, action.payload] };
-        case 'addContact':
-            return { ...state, contact: [...state.contact, action.payload] };
         default:
             return state;
     }

@@ -145,7 +145,7 @@ export default function ProfileView() {
       </View>
 
       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
-        {profile.allergies.map((allergy, index) => (
+        {profile.allergies && profile.allergies.map((allergy, index) => (
           <Chip
             key={index}
             icon="information"
