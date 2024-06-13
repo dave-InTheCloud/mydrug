@@ -47,4 +47,10 @@ export class ProfileService {
     profile.allergies.push(allergy);
     await this.setProfile(profile);
   }
+
+  async clearProfile(): Promise<void> {
+    if (this.storage) {
+      await this.storage.clear();
+    }
+  }
 }

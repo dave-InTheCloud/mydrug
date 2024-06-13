@@ -37,4 +37,11 @@ export class StorageService<T> implements IStorageService<T> {
       await AsyncStorage.removeItem(this.prefix + key);
     }
   }
+  async clear(): Promise<void> {
+    if (!this.sync) {
+      AsyncStorage.clear();
+    } else {
+      await AsyncStorage.clear();
+    }
+  }
 }

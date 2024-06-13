@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Input from '@/components/Input';
 import ListAccordion from '@/components/ListAccordion';
-import { Chip, Divider, IconButton, List, Text } from 'react-native-paper';
+import { Button, Chip, Divider, IconButton, List, Text } from 'react-native-paper';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,24 +24,7 @@ export default function ProfileView() {
   const [isContactsModified, setIsContactsModified] = React.useState(false);
   const [newAllergy, setNewAllergy] = React.useState('');
   const [newContact, setNewContact] = React.useState({ name: '', firstName: '', phoneNumber: '' });
-  const [newInfo, setInfo] = React.useState({ name: '', firstName: '', phoneNumber: '' });
-
   const [profile, dispatch] = useReducer(profileReducer, initialState);
-
-  const [text, setText] = React.useState("");
-
-  /*   const [profile, setProfile] = useState({
-      name: '',
-      firstName: '',
-      email: '',
-      phoneNumber: '',
-      birthDate: '',
-      address: '',
-      doctor: '',
-      allergies: [''],
-      contact: [],
-    }); */
-
   const profileService = new ProfileService();
 
   useEffect(() => {
@@ -78,10 +61,22 @@ export default function ProfileView() {
     dispatch({ type: 'updateProperty', payload: profile });
   };
 
+
+  const clearProfile = async () => {
+    try {
+      await profileService.clearProfile();
+      dispatch({ type: 'clearProfile', payload: initialState });
+      console.log('Profile data cleared');
+    } catch (error) {
+      console.error('Error clearing profile data:', error);
+    }
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
+        <Button mode="contained" onPress={clearProfile} children={"clear profile"} />;
       <Input
         label="Nom"
         value={profile.name}

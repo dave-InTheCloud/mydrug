@@ -6,6 +6,9 @@ export function profileReducer(state: Profile, action: { type: string; payload?:
     switch (action.type) {
         case 'updateProperty':
             return { ...state, [action.payload.property]: action.payload.value };
+        case 'clearProfile': {
+            return new Profile();
+        }
         default:
             return state;
     }
