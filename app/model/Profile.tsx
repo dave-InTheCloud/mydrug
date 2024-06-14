@@ -27,14 +27,5 @@ export class Profile {
     };
     Object.assign(this, { ...defaultData, ...data });
   }
-
-  addAllergy(allergy: string) {
-    this.allergies.push(allergy);
-  }
-
-  addContact(contact: { name: string; firstName: string; phoneNumber: string }) {
-    this.contact.push(contact);
-  }
-
   // add more methods for managing the profile data
 }

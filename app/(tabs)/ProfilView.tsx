@@ -76,7 +76,7 @@ export default function ProfileView() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
-        <Button mode="contained" onPress={clearProfile} children={"clear profile"} />;
+      <Button mode="contained" onPress={clearProfile} children={"clear profile"} />
       <Input
         label="Nom"
         value={profile.name}
@@ -147,7 +147,6 @@ export default function ProfileView() {
             onPress={() => console.log('Pressed')}
             style={{ marginRight: 10, marginBottom: 10 }}
           >
-            {console.log('allergy:', allergy)}
             {allergy}
           </Chip>
         ))}
@@ -163,7 +162,7 @@ export default function ProfileView() {
 
         {isContactsModified && (
           <>
-            <View style={[styles.rowAdaptive, { width: width > 500 ? 'auto' : '100%' }]}>
+            <View style={[styles.rowAdaptive, { width: width > 700 ? 'auto' : '100%' , gap: 16}]}>
               <Input
                 label="Nom"
                 value={newContact.name}
@@ -184,15 +183,12 @@ export default function ProfileView() {
               />
 
             </View>
-          </>
-        )}
 
-        {isContactsModified && (<>
-          <View style={[styles.rowCentered]} >
-            <IconButton icon="cancel" onPress={() => setIsContactsModified(false)} iconColor='red' />
-            <IconButton icon="check" onPress={addContact} iconColor='green' />
-          </View>
-        </>)}
+            <View style={[styles.rowCentered]} >
+              <IconButton icon="cancel" onPress={() => setIsContactsModified(false)} iconColor='red' />
+              <IconButton icon="check" onPress={addContact} iconColor='green' />
+            </View>
+          </>)}
       </View>
 
       <View style={styles.row}>
@@ -245,13 +241,12 @@ export const createStyles = (width) => StyleSheet.create({
     justifyContent: 'center'
   },
   rowAdaptive: {
-    flexDirection: width < 768 ? 'column' : 'row',
+    flexDirection: width < 800 ? 'column' : 'row',
     alignItems: 'center'
   },
 
   mobileInput: {
-    marginRight: width > 768 ? 10 : 0,
-    width: width > 768 ? 'auto' : '100%',
+    width: width > 800 ? 'auto' : '100%',
   }
 });
 

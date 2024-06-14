@@ -50,7 +50,7 @@ export class ProfileService {
 
   async clearProfile(): Promise<void> {
     if (this.storage) {
-      await this.storage.clear();
+      await this.removeProfile();
     }
   }
 }

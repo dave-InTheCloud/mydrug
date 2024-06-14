@@ -18,7 +18,7 @@ export default function HomeScreen() {
         />
       }>
       <DailyTab />
-      <ListAccordion />
+      {/* <ListAccordion /> */}
 
     </ParallaxScrollView>
   );
