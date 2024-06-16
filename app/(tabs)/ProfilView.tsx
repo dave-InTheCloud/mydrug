@@ -15,8 +15,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ProfileService } from '../services/profile/ProfileService';
 import { profileReducer, initialState } from '../services/profile/ProfileReducer';
 
+/**
+ * Renders a profile view component that displays user profile information and allows editing of certain fields.
+ *
+ * @return {JSX.Element} The rendered profile view component.
+ */
 export default function ProfileView() {
 
+  
+  /**
+   * Retrieves the current window dimensions and creates styles based on the width.
+   *
+   * @return {void}
+   */
   const { width } = useWindowDimensions();
   const styles = createStyles(width);
 
@@ -39,6 +50,11 @@ export default function ProfileView() {
     });
   }, []);
 
+  /**
+   * Adds a new allergy to the profile and updates the profile in the profile service.
+   *
+   * @return {Promise<void>} A promise that resolves when the allergy is added and the profile is updated.
+   */
   const addAllergy = async () => {
     if (newAllergy) {
       profile.allergies.push(newAllergy);
@@ -47,6 +63,9 @@ export default function ProfileView() {
     setNewAllergy('');
   };
 
+  /**
+   * Add a new contact to the profile if name, firstName, and phoneNumber are provided.
+   */
   const addContact = async () => {
     if (newContact.name && newContact.firstName && newContact.phoneNumber) {
       profile.contact.push(newContact);
@@ -55,6 +74,13 @@ export default function ProfileView() {
     }
   };
 
+  /**
+   * Updates the profile with the given property and value, and saves the updated profile to the profile service.
+   *
+   * @param {string} property - The property of the profile to update.
+   * @param {any} value - The new value for the property.
+   * @return {Promise<void>} A promise that resolves when the profile is updated and saved.
+   */
   const handleInputChange = async (property: string, value: any) => {
     profile[property] = value;
     await profileService.setProfile(profile);
@@ -62,6 +88,12 @@ export default function ProfileView() {
   };
 
 
+/**
+ * Clears the profile data by calling the `clearProfile` function of the `profileService` and updating the state with the `initialState`.
+ *
+ * @return {Promise<void>} A promise that resolves when the profile data is cleared and the state is updated.
+ * @throws {Error} If there is an error while clearing the profile data.
+ */
   const clearProfile = async () => {
     try {
       await profileService.clearProfile();
