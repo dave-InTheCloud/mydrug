@@ -86,7 +86,7 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
             }
 
             {isPlanModified && (
-                <>
+                <View style={styles.rowAdaptive}>
                     <View style={[styles.rowAdaptive, /** width: width > 700 ? 'auto' : '100%', */ { gap: 16 }]}>
                         <Input
                             label="Nom"
@@ -113,7 +113,8 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
                         <IconButton icon="cancel" onPress={() => setIsPlanModified(false)} iconColor='red' />
                         <IconButton icon="check" onPress={addContact} iconColor='green' />
                     </View>
-                </>)}
+                </View>
+            )}
 
             <SafeAreaView>
                 <List.AccordionGroup>

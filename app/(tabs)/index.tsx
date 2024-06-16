@@ -6,8 +6,19 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import DailyTab from '@/components/DailyTab';
 import ListAccordion from '@/components/ListAccordion';
+import { useNavigation } from 'expo-router';
+import { useEffect } from 'react';
 
 export default function HomeScreen() {
+
+  const navigation = useNavigation();
+
+
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
+
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
