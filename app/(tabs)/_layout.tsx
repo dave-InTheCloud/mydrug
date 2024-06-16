@@ -15,6 +15,7 @@ export default function TabLayout() {
   return (
     <>
     <TopBar leftBtn rightBtn title={capitalizedPathname || 'Mon traitement'}  />
+
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,

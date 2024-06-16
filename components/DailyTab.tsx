@@ -41,6 +41,12 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
         });
     }, []);
 
+    /**
+     * Toggles the state of a button with the given value.
+     *
+     * @param {string} value - The value of the button to toggle.
+     * @return {Promise<void>} A promise that resolves when the state has been updated.
+     */
     const toggleButton = async (value: string) => {
         /**
          * multiple selection 
@@ -54,6 +60,11 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
         setnewMedication(new Medication('', '', ''));
     };
 
+    /**
+     * Adds a new medication to the drug plan and saves it to the server.
+     *
+     * @return {Promise<void>} - A promise that resolves when the medication is added and saved successfully.
+     */
     const addContact = async () => {
         if (newMedication.name && newMedication.dose && newMedication.remark) {
             drugPlan[selectedTimeOfDay].push(newMedication);
