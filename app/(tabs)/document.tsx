@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform, useWindowDimensions } from 'react-native';
+import { StyleSheet, Image, Platform, useWindowDimensions, View } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -23,8 +23,8 @@ export default function DocumntView() {
 
   useEffect(() => {
     profileService.getProfile().then(profile => {
-       setProfile(profile);
-    }).then( () => drugPlanService.getDrugPlan().then(drugPlan => {
+      setProfile(profile);
+    }).then(() => drugPlanService.getDrugPlan().then(drugPlan => {
       setDrugPlan(drugPlan);
     })).finally(() => setLoading(false));
   }, []);
@@ -39,7 +39,9 @@ export default function DocumntView() {
          </ThemedView>
      </ParallaxScrollView> */
     // Create Document Component
-   <BasicDocument profile={profile} drugPlan={drugPlan}/>
+    <View>
+      {loading ? <ThemedText>Loading...</ThemedText> : <BasicDocument profile={profile} drugPlan={drugPlan} />}
+    </View>
   );
 }
 
