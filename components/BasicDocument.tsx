@@ -49,7 +49,7 @@ function BasicDocument({ profile, drugPlan }: { profile: Profile, drugPlan: Drug
 
       if (Platform.OS === 'ios') {
         const base64Pdf = await pdfDoc.saveAsBase64();
-        const filename = 'temp_pdf.pdf';
+        const filename = 'temp_pdf_ios.pdf';
         const path = FileSystem.documentDirectory + filename;
         await FileSystem.writeAsStringAsync(path, base64Pdf, { encoding: FileSystem.EncodingType.Base64 });
         const uri = path;
@@ -58,8 +58,10 @@ function BasicDocument({ profile, drugPlan }: { profile: Profile, drugPlan: Drug
       } else if (Platform.OS === 'android') {
         // Save the PDF document to the device's file system
         const pdfBytes = await pdfDoc.save();
-        const uri = FileSystem.documentDirectory + 'example.pdf';
-        await FileSystem.writeAsStringAsync(uri, pdfBytes, { encoding: FileSystem.EncodingType.Base64 });
+        const filename = 'temp_pdf_ios.pdf';
+        const base64Pdf = btoa(String.fromCharCode.apply(null, pdfBytes));
+        const uri = FileSystem.documentDirectory + filename;
+        await FileSystem.writeAsStringAsync(uri, base64Pdf, { encoding: FileSystem.EncodingType.Base64 });
 
         setUrl(uri);
       } else {
