@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Input from '@/components/Input';
 import ListAccordion from '@/components/ListAccordion';
-import { Button, Chip, Divider, IconButton, List, Text } from 'react-native-paper';
+import { Button, Chip, Divider, IconButton, List, Text, Title, useTheme } from 'react-native-paper';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,7 +22,7 @@ import { profileReducer, initialState } from '../services/profile/ProfileReducer
  */
 export default function ProfileView() {
 
-  
+
   /**
    * Retrieves the current window dimensions and creates styles based on the width.
    *
@@ -88,12 +88,12 @@ export default function ProfileView() {
   };
 
 
-/**
- * Clears the profile data by calling the `clearProfile` function of the `profileService` and updating the state with the `initialState`.
- *
- * @return {Promise<void>} A promise that resolves when the profile data is cleared and the state is updated.
- * @throws {Error} If there is an error while clearing the profile data.
- */
+  /**
+   * Clears the profile data by calling the `clearProfile` function of the `profileService` and updating the state with the `initialState`.
+   *
+   * @return {Promise<void>} A promise that resolves when the profile data is cleared and the state is updated.
+   * @throws {Error} If there is an error while clearing the profile data.
+   */
   const clearProfile = async () => {
     try {
       await profileService.clearProfile();
@@ -104,53 +104,72 @@ export default function ProfileView() {
     }
   };
 
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
-      <Button mode="contained" onPress={clearProfile} children={"clear profile"} />
-      <Input
-        label="Nom"
-        value={profile.name}
-        id="name"
-        handleChangeText={handleInputChange}
-      />
-      <Input
-        label="Prenom"
-        value={profile.firstName}
-        id="firstName"
-        handleChangeText={handleInputChange}
-      />
-      <Input
-        label="Née le"
-        value={profile.birthDate}
-        id="birthDate"
-        handleChangeText={handleInputChange}
-      />
-      <Input
-        label="Matricule Sécurité social"
-        value={profile.socialSecurityNumber}
-        id='socialSecurityNumber'
-        handleChangeText={handleInputChange}
-      />
-      <Input
-        label="Email"
-        value={profile.email}
-        id='email'
-        handleChangeText={handleInputChange}
-      />
-      <Input
-        label="Médecin"
-        value={profile.doctor}
-        id="doctor"
-        handleChangeText={handleInputChange}
-      />
+  const { colors } = useTheme();
 
-      <Divider />
+  return (
+
+    <ParallaxScrollView>
+
+
+      <Title>Profil</Title>
+      <Divider style={styles.divider}></Divider>
+      <View style={[styles.rowAdaptive]}>
+        <Button mode="contained" icon={"delete"}
+          onPress={clearProfile} children={"supprimer le profile"} buttonColor={colors.secondary} />
+      </View>
+
+      <View style={[styles.rowAdaptive, { gap: 16, justifyContent: 'center' }]}>
+        <Input
+          label="Nom"
+          value={profile.name}
+          id="name"
+          handleChangeText={handleInputChange}
+          style={styles.mobileInput}
+        />
+        <Input
+          label="Prenom"
+          value={profile.firstName}
+          id="firstName"
+          handleChangeText={handleInputChange}
+          style={styles.mobileInput}
+        />
+        <Input
+          label="Née le"
+          value={profile.birthDate}
+          id="birthDate"
+          handleChangeText={handleInputChange}
+          style={styles.mobileInput}
+        />
+      </View>
+      <View style={[styles.rowAdaptive, { gap: 16, justifyContent: 'center' }]}>
+        <Input
+          label="Matricule Sécurité social"
+          value={profile.socialSecurityNumber}
+          id='socialSecurityNumber'
+          handleChangeText={handleInputChange}
+          style={styles.mobileInput}
+        />
+        <Input
+          label="Email"
+          value={profile.email}
+          id='email'
+          handleChangeText={handleInputChange}
+          style={styles.mobileInput}
+        />
+        <Input
+          label="Médecin"
+          value={profile.doctor}
+          id="doctor"
+          handleChangeText={handleInputChange}
+          style={styles.mobileInput}
+        />
+      </View>
+
       <View style={styles.row}>
-        <Text>Allergies</Text>
+        <Title>Allergies</Title>
         <IconButton icon="plus" onPress={() => setIsAllergyModified(true)} />
       </View>
+      <Divider style={styles.divider} />
       <View style={styles.rowAdaptive}>
         {isAllergyModified && (
           <>
@@ -185,16 +204,17 @@ export default function ProfileView() {
       </View>
 
 
-      <Divider />
-      <View style={styles.row}>
-        <Text>Contacts</Text>
+
+      <View style={[styles.row]}>
+        <Title>Contacts</Title>
         <IconButton icon="plus" onPress={() => setIsContactsModified(true)} />
       </View>
+      <Divider style={styles.divider} />
       <View style={styles.rowAdaptive}>
 
         {isContactsModified && (
           <>
-            <View style={[styles.rowAdaptive, { width: width > 700 ? 'auto' : '100%' , gap: 16}]}>
+            <View style={[styles.rowAdaptive, { width: width > 800 ? 'auto' : '100%', gap: 16 }]}>
               <Input
                 label="Nom"
                 value={newContact.name}
@@ -245,7 +265,7 @@ export const createStyles = (width) => StyleSheet.create({
     position: 'absolute',
   },
   titleContainer: {
-    flexDirection: width < 768 ? 'column' : 'row',
+    flexDirection: width < 800 ? 'column' : 'row',
     gap: 8,
     ...Platform.select({
       ios: {
@@ -264,21 +284,31 @@ export const createStyles = (width) => StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    marginTop: '1%',
+    marginBottom: '1%'
   },
   rowCentered: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginTop: '1%',
+    marginBottom: '1%'
   },
   rowAdaptive: {
     flexDirection: width < 800 ? 'column' : 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: '1%',
+    marginBottom: '1%'
   },
 
   mobileInput: {
-    width: width > 800 ? 'auto' : '100%',
-  }
+    width: width > 800 ? 'auto' : '90%',
+  },
+  divider: {
+    marginBottom: '1%',
+    color: '#e27c28'
+  },
 });
 

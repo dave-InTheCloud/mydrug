@@ -6,21 +6,32 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import TopBar from '@/components/TopBar';
 import { usePathname } from 'expo-router';
+import { IconButton, useTheme } from 'react-native-paper';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const pathname = usePathname().slice(1);
   const capitalizedPathname = pathname.charAt(0).toUpperCase() + pathname.slice(1);
-  
+  const { colors } = useTheme();
+
   return (
     <>
-    <TopBar leftBtn rightBtn title={capitalizedPathname || 'Mon traitement'}  />
+    {/* <TopBar leftBtn rightBtn title={capitalizedPathname || 'Mon traitement'}  /> */}
 
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+        headerShown: true,
+        headerTitleAlign: 'center',
+        headerRight: () => <IconButton icon="flag" onPress={() => console.log('hello')}  iconColor={colors.topBarDividerColor}/>,
+        headerStyle: {
+          backgroundColor:  colors.topBarBg,
+          borderBottomColor: colors.topBarDividerColor,
+          borderBottomWidth: 0.3
+        },
+        tabBarInactiveBackgroundColor: colors.topBarBg,
+        tabBarActiveBackgroundColor: colors.topBarDividerColor,
+        tabBarActiveTintColor: 'black',
+        }}>
         <Tabs.Screen
           name="index"
           options={{

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, View } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -6,31 +6,16 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import DailyTab from '@/components/DailyTab';
 import ListAccordion from '@/components/ListAccordion';
-import { useNavigation } from 'expo-router';
+import { Link, Stack, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
+import { Text, useTheme } from 'react-native-paper';
 
 export default function HomeScreen() {
-
-  const navigation = useNavigation();
-
-
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
-
+  const { colors } = useTheme();
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <DailyTab />
-      {/* <ListAccordion /> */}
-
+    <ParallaxScrollView>
+      <DailyTab style={{ backgroundColor: colors.background}} />
     </ParallaxScrollView>
   );
 }

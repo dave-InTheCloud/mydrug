@@ -4,7 +4,7 @@ import { drugPlanReducer } from '@/app/services/drugPlan/DrugPlanReducer';
 import { DrugPlanService } from '@/app/services/drugPlan/DrugPlanService';
 import * as React from 'react';
 import { Platform, SafeAreaView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { Button, IconButton, List, SegmentedButtons, Text } from 'react-native-paper';
+import { Button, Divider, IconButton, List, SegmentedButtons, Text, Title, useTheme } from 'react-native-paper';
 import Input from '@/components/Input';
 
 interface DailyTabProps {
@@ -73,10 +73,11 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
         }
     };
 
+    const { colors } = useTheme();
 
     return (
         <>
-            <SafeAreaView style={[styles.container, style]}>
+            <SafeAreaView style={[styles.container, style, { backgroundColor: colors.background }]}>
 
                 {buttons.map((button) => (
                     <Button
@@ -90,15 +91,21 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
                 ))}
 
             </SafeAreaView>
-            {buttonsState && Object.keys(buttonsState).length > 0 && <View style={styles.row}>
-                <Text>Medicaments</Text>
-                <IconButton icon="plus" onPress={() => setIsPlanModified(true)} />
-            </View>
+            {
+                buttonsState && Object.keys(buttonsState).length > 0 && (
+                    <> 
+                        <View style={[styles.row, {marginBottom: 0}]}>
+                            <Title>Medicaments</Title>
+                            <IconButton icon="plus" onPress={() => setIsPlanModified(true)} iconColor='green' />
+                        </View>
+                        <Divider style={styles.divider} />
+                    </>
+                )
             }
 
             {isPlanModified && (
                 <View style={styles.rowAdaptive}>
-                    <View style={[styles.rowAdaptive, /** width: width > 700 ? 'auto' : '100%', */ { gap: 16 }]}>
+                    <View style={[styles.rowAdaptive, { width: width > 800 ? 'auto' : '100%', gap: 16 }]}>
                         <Input
                             label="Nom"
                             value={newMedication.name}
@@ -149,7 +156,9 @@ export const createStyles = (width) => StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        marginTop: '1%',
+        marginBottom: '1%'
     },
     rowCentered: {
         flexDirection: 'row',
@@ -163,7 +172,7 @@ export const createStyles = (width) => StyleSheet.create({
     },
 
     mobileInput: {
-        width: width > 800 ? 'auto' : '100%',
+        width: width > 800 ? 'auto' : '90%',
     },
     container: {
         flexDirection: 'row',
@@ -183,6 +192,10 @@ export const createStyles = (width) => StyleSheet.create({
     },
     button: {
         margin: '1%',
+    },
+    divider: {
+        marginBottom: '1%',
+        color: '#e27c28'
     },
 });
 

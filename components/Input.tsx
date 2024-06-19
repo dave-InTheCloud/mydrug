@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
 type InputProps = {
@@ -28,5 +29,15 @@ const Input: React.FC<InputProps & Omit<TextInputProps, 'onChangeText'>> = ({
     />
   );
 };
+
+const styles = StyleSheet.create({
+  input: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+});
 
 export default Input;
