@@ -11,6 +11,7 @@ import BasicDocument from '@/components/BasicDocument';
 import { useEffect, useState } from 'react';
 import { ProfileService } from '../services/profile/ProfileService';
 import { DrugPlanService } from '../services/drugPlan/DrugPlanService';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 export default function DocumntView() {
@@ -39,8 +40,8 @@ export default function DocumntView() {
          </ThemedView>
      </ParallaxScrollView> */
     // Create Document Component
-    <View>
-      {loading ? <ThemedText>Loading...</ThemedText> : <BasicDocument profile={profile} drugPlan={drugPlan} />}
+    <View style={{ height: '100%' }}>
+      {loading ? <ActivityIndicator animating={loading} /> : <BasicDocument profile={profile} drugPlan={drugPlan} />}
     </View>
   );
 }
