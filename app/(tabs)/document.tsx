@@ -8,10 +8,11 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 import BasicDocument from '@/components/BasicDocument';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ProfileService } from '../services/profile/ProfileService';
 import { DrugPlanService } from '../services/drugPlan/DrugPlanService';
 import { ActivityIndicator } from 'react-native-paper';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 export default function DocumntView() {
@@ -22,13 +23,25 @@ export default function DocumntView() {
   const [drugPlan, setDrugPlan] = useState({});
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const getData = () => {
     profileService.getProfile().then(profile => {
       setProfile(profile);
     }).then(() => drugPlanService.getDrugPlan().then(drugPlan => {
       setDrugPlan(drugPlan);
-    })).finally(() => setLoading(false));
+    })).finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    getData();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setLoading(true)
+      getData()
+    }, [])
+  );
+
 
   return (
     /*  <ParallaxScrollView
