@@ -16,7 +16,7 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
     const { width } = useWindowDimensions();
     const styles = createStyles(width);
 
-    const [buttonsState, setButtonsState] = React.useState<{ [key: string]: boolean }>({});
+    const [buttonsState, setButtonsState] = React.useState<{ [key: string]: boolean }>({'morning': true});
     const drugPlanService = new DrugPlanService();
     const [drugPlan, dispatch] = React.useReducer(drugPlanReducer, new DrugPlan() as DrugPlan);
     const [isPlanModified, setIsPlanModified] = React.useState(false);
@@ -66,7 +66,7 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
      * @return {Promise<void>} - A promise that resolves when the medication is added and saved successfully.
      */
     const addContact = async () => {
-        if (newMedication.name && newMedication.dose && newMedication.remark) {
+        if (newMedication.name && newMedication.dose) {
             drugPlan[selectedTimeOfDay].push(newMedication);
             await drugPlanService.addMedication(selectedTimeOfDay, newMedication);
             setnewMedication(new Medication('', '', ''));

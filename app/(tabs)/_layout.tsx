@@ -7,6 +7,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import TopBar from '@/components/TopBar';
 import { usePathname } from 'expo-router';
 import { IconButton, useTheme } from 'react-native-paper';
+import DropDown from '@/components/DropDown';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -22,7 +23,7 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: true,
         headerTitleAlign: 'center',
-        headerRight: () => <IconButton icon="flag" onPress={() => console.log('hello')}  iconColor={colors.topBarDividerColor}/>,
+        headerRight: () => <DropDown colors={colors}/>,
         headerStyle: {
           backgroundColor:  colors.topBarBg,
           borderBottomColor: colors.topBarDividerColor,

@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Input from '@/components/Input';
 import ListAccordion from '@/components/ListAccordion';
-import { Button, Chip, Divider, IconButton, List, Text, Title, useTheme } from 'react-native-paper';
+import { Button, Chip, Divider, HelperText, IconButton, List, Text, Title, useTheme } from 'react-native-paper';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -155,7 +155,8 @@ export default function ProfileView() {
           id='email'
           handleChangeText={handleInputChange}
           style={styles.mobileInput}
-        />
+          type='email'
+        />  
         <Input
           label="Médecin"
           value={profile.doctor}
@@ -304,7 +305,7 @@ export const createStyles = (width) => StyleSheet.create({
   },
 
   mobileInput: {
-    width: width > 800 ? 'auto' : '90%',
+    width: width > 800 ? 'auto' : '100%',
   },
   divider: {
     marginBottom: '1%',
