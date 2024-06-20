@@ -28,7 +28,7 @@ const Input: React.FC<InputProps & Omit<TextInputProps, 'onChangeText'>> = ({
   };
 
   const hasErrors = () => {
-    if (type === 'email') {
+    if (type === 'email' && value && value.length > 0) {
       return !value.includes('@');
     }
   }
@@ -45,6 +45,7 @@ const Input: React.FC<InputProps & Omit<TextInputProps, 'onChangeText'>> = ({
         onChangeText={handleChange}
         {...otherProps}
       />
+
       {type && hasErrors() && <HelperText type="error" visible={hasErrors()}>
         Email address is invalid!
       </HelperText>
