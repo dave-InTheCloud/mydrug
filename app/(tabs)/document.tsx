@@ -11,7 +11,7 @@ import BasicDocument from '@/components/BasicDocument';
 import React, { useEffect, useState } from 'react';
 import { ProfileService } from '../services/profile/ProfileService';
 import { DrugPlanService } from '../services/drugPlan/DrugPlanService';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 
 
@@ -42,6 +42,7 @@ export default function DocumntView() {
     }, [])
   );
 
+  const { colors } = useTheme();
 
   return (
     /*  <ParallaxScrollView
@@ -53,7 +54,7 @@ export default function DocumntView() {
          </ThemedView>
      </ParallaxScrollView> */
     // Create Document Component
-    <View style={{ height: '100%' }}>
+    <View style={{ height: '100%' , backgroundColor: colors.background}}>
       {loading ? <ActivityIndicator animating={loading} /> : <BasicDocument profile={profile} drugPlan={drugPlan} />}
     </View>
   );

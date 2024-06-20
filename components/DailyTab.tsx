@@ -6,6 +6,7 @@ import * as React from 'react';
 import { Platform, SafeAreaView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Button, Divider, IconButton, List, SegmentedButtons, Text, Title, useTheme } from 'react-native-paper';
 import Input from '@/components/Input';
+import { useFocusEffect } from 'expo-router';
 
 interface DailyTabProps {
     style?: object;
@@ -15,8 +16,9 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
 
     const { width } = useWindowDimensions();
     const styles = createStyles(width);
+    const { colors } = useTheme();
 
-    const [buttonsState, setButtonsState] = React.useState<{ [key: string]: boolean }>({'morning': true});
+    const [buttonsState, setButtonsState] = React.useState<{ [key: string]: boolean }>({});
     const drugPlanService = new DrugPlanService();
     const [drugPlan, dispatch] = React.useReducer(drugPlanReducer, new DrugPlan() as DrugPlan);
     const [isPlanModified, setIsPlanModified] = React.useState(false);
@@ -32,6 +34,19 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
     ];
 
     React.useEffect(() => {
+        toggleButton('morning');
+        getData(drugPlanService, dispatch);
+    }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (!buttonsState) toggleButton('morning');
+            getData(drugPlanService, dispatch);
+        }, [])
+    );
+
+
+    function getData(drugPlanService: DrugPlanService, dispatch: React.DispatchWithoutAction) {
         drugPlanService.getDrugPlan().then(drugplan => {
             if (drugplan) {
                 Object.keys(drugplan).forEach(key => {
@@ -39,7 +54,7 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
                 });
             }
         });
-    }, []);
+    }
 
     /**
      * Toggles the state of a button with the given value.
@@ -65,15 +80,26 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
      *
      * @return {Promise<void>} - A promise that resolves when the medication is added and saved successfully.
      */
-    const addContact = async () => {
+    const addMedication = async () => {
         if (newMedication.name && newMedication.dose) {
             drugPlan[selectedTimeOfDay].push(newMedication);
             await drugPlanService.addMedication(selectedTimeOfDay, newMedication);
             setnewMedication(new Medication('', '', ''));
         }
+
     };
 
-    const { colors } = useTheme();
+    const clearDrugPlan = async () => {
+        try {
+            await drugPlanService.removeDrugPlan();
+            dispatch({ type: 'clearDrugPlan', payload: new DrugPlan() as DrugPlan });
+            setIsPlanModified(false);
+            console.log('Profile data cleared');
+        } catch (error) {
+            console.error('Error clearing profile data:', error);
+        }
+    };
+
 
     return (
         <>
@@ -93,12 +119,17 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
             </SafeAreaView>
             {
                 buttonsState && Object.keys(buttonsState).length > 0 && (
-                    <> 
-                        <View style={[styles.row, {marginBottom: 0}]}>
+                    <>
+                        <View style={[styles.row, { marginBottom: 0 }]}>
                             <Title>Medicaments</Title>
                             <IconButton icon="plus" onPress={() => setIsPlanModified(true)} iconColor='green' />
                         </View>
                         <Divider style={styles.divider} />
+
+                        <View style={[styles.rowAdaptive, { marginBottom: '1%' }]}>
+                            <Button mode="contained" icon={"delete"}
+                                onPress={clearDrugPlan} children={"Supprimer mon planning"} buttonColor={colors.secondary} />
+                        </View>
                     </>
                 )
             }
@@ -111,12 +142,14 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
                             value={newMedication.name}
                             onChangeText={text => setnewMedication({ ...newMedication, name: text })}
                             style={styles.mobileInput}
+                            required
                         />
                         <Input
                             label="Dose"
                             value={newMedication.dose}
                             onChangeText={text => setnewMedication({ ...newMedication, dose: text })}
                             style={styles.mobileInput}
+                            required
                         />
                         <Input
                             label="Remarque"
@@ -129,7 +162,7 @@ const DailyTab: React.FC<DailyTabProps> = ({ style }) => {
 
                     <View style={[styles.rowCentered]} >
                         <IconButton icon="cancel" onPress={() => setIsPlanModified(false)} iconColor='red' />
-                        <IconButton icon="check" onPress={addContact} iconColor='green' />
+                        <IconButton icon="check" onPress={addMedication} iconColor='green' />
                     </View>
                 </View>
             )}
@@ -200,3 +233,4 @@ export const createStyles = (width) => StyleSheet.create({
 });
 
 export default DailyTab;
+

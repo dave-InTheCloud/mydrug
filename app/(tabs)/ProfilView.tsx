@@ -8,12 +8,14 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Input from '@/components/Input';
 import ListAccordion from '@/components/ListAccordion';
-import { Button, Chip, Divider, HelperText, IconButton, List, Text, Title, useTheme } from 'react-native-paper';
+import { Button, Chip, Divider, HelperText, IconButton, List, Snackbar, Text, Title, useTheme } from 'react-native-paper';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ProfileService } from '../services/profile/ProfileService';
 import { profileReducer, initialState } from '../services/profile/ProfileReducer';
+import { useFocusEffect } from 'expo-router';
+import * as Clipboard from 'expo-clipboard';
 
 /**
  * Renders a profile view component that displays user profile information and allows editing of certain fields.
@@ -37,8 +39,19 @@ export default function ProfileView() {
   const [newContact, setNewContact] = React.useState({ name: '', firstName: '', phoneNumber: '' });
   const [profile, dispatch] = useReducer(profileReducer, initialState);
   const profileService = new ProfileService();
+  const [visible, setVisible] = React.useState(false);
 
   useEffect(() => {
+    getData();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getData()
+    }, [])
+  );
+
+  function getData() {
     profileService.getProfile().then(profile => {
       if (profile) {
         Object.keys(profile).forEach(key => {
@@ -48,8 +61,7 @@ export default function ProfileView() {
         dispatch({ type: 'updateProperty', payload: { property: 'contact', value: profile.contact } });
       }
     });
-  }, []);
-
+  }
   /**
    * Adds a new allergy to the profile and updates the profile in the profile service.
    *
@@ -104,18 +116,22 @@ export default function ProfileView() {
     }
   };
 
+  const copyToClipboard = async (value: string) => {
+    await Clipboard.setStringAsync(value);
+    setVisible(true);
+  };
+
   const { colors } = useTheme();
 
   return (
 
     <ParallaxScrollView>
 
-
       <Title>Profil</Title>
       <Divider style={styles.divider}></Divider>
       <View style={[styles.rowAdaptive]}>
         <Button mode="contained" icon={"delete"}
-          onPress={clearProfile} children={"supprimer le profile"} buttonColor={colors.secondary} />
+          onPress={clearProfile} children={"supprimer mon planning"} buttonColor={colors.secondary} />
       </View>
 
       <View style={[styles.rowAdaptive, { gap: 16, justifyContent: 'center' }]}>
@@ -247,15 +263,30 @@ export default function ProfileView() {
       <View style={styles.row}>
         {profile.contact && profile.contact.map((contact, index) => (
           <Chip key={index} icon="phone"
-            onPress={() => console.log('Pressed')}
+            onPress={() => copyToClipboard(`${contact.name}, ${contact.firstName}, ${contact.phoneNumber}`)}
             style={{ marginRight: 10, marginBottom: 10 }}
           >
             {contact.name}, {contact.firstName}, {contact.phoneNumber}
           </Chip>
         ))}
       </View>
+
+      <Snackbar
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={1000}
+        action={{
+          label: 'close',
+          onPress: () => {
+            // Do something
+          },
+        }}>
+        Data copied !
+      </Snackbar>
     </ParallaxScrollView>
   );
+
+ 
 }
 
 export const createStyles = (width) => StyleSheet.create({

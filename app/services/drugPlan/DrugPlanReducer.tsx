@@ -12,13 +12,15 @@ type DrugPlanAction =
 export const drugPlanReducer = (state: DrugPlanState, action: DrugPlanAction): DrugPlanState => {
   switch (action.type) {
     case 'updateProperty':
-        return { ...state, [action.payload.property]: action.payload.value };
+      return { ...state, [action.payload.property]: action.payload.value };
     case "SET_DRUG_PLAN":
       return { ...state, drugPlan: action.payload };
     case "ADD_MEDICATION":
       const drugPlan = new DrugPlan();
       drugPlan.addMedication(action.payload.timeOfDay, action.payload.medication);
       return { ...state, drugPlan };
+    case 'clearDrugPlan':
+      return new DrugPlan();
     default:
       return state;
   }

@@ -7,6 +7,7 @@ type InputProps = {
   value: string;
   id: string;
   type: string;
+  required?: boolean;
   handleChangeText: (id: string, text: string) => void;
 };
 
@@ -15,6 +16,7 @@ const Input: React.FC<InputProps & Omit<TextInputProps, 'onChangeText'>> = ({
   value,
   id,
   type,
+  required = false,
   handleChangeText,
   ...otherProps
 }) => {
@@ -31,6 +33,10 @@ const Input: React.FC<InputProps & Omit<TextInputProps, 'onChangeText'>> = ({
     }
   }
 
+  const isRequired = () => {
+      return !value || value.length === 0 ||  value === '';
+  }
+
   return (
     <View style={styles.mobileInput}>
       <TextInput
@@ -43,6 +49,10 @@ const Input: React.FC<InputProps & Omit<TextInputProps, 'onChangeText'>> = ({
         Email address is invalid!
       </HelperText>
       }
+   {/*    {required && isRequired() && <HelperText type="error" visible={isRequired()}>
+        This input is required!
+      </HelperText>
+      } */}
     </View>
 
   );

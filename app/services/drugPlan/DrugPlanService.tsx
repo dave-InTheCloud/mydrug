@@ -28,10 +28,13 @@ export class DrugPlanService {
     await this.storage.remove(this.key);
   }
 
+  async removeDrugPlanByKey(key:string): Promise<void> {
+    await this.storage.remove(key);
+  }
 
   async clearDrugPlan(): Promise<void> {
     if (this.storage) {
-      await this.storage.clear();
+      await this.removeDrugPlan();
     }
   }
 
