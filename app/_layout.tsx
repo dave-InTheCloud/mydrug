@@ -73,7 +73,7 @@ export default function RootLayout() {
         level5: 'rgb(227, 231, 211)',
       },
       topBarBg: '#8ac73247',
-      topBarDividerColor: '#e27c28'
+      topBarDividerColor: '#e27c28c4'
     },
   };
 

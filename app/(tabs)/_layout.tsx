@@ -30,7 +30,7 @@ export default function TabLayout() {
         },
         tabBarInactiveBackgroundColor: colors.topBarBg,
         tabBarActiveBackgroundColor: colors.topBarDividerColor,
-        tabBarActiveTintColor: 'black',
+        tabBarActiveTintColor: '#d6e7c2',
         }}>
         <Tabs.Screen
           name="index"
