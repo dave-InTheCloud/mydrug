@@ -25,6 +25,7 @@ const DropDown = ({ colors }: DropDownProps) => {
       <Menu.Item onPress={() => { }} title="FR" />
       <Divider />
       <Menu.Item onPress={() => { }} title="EN" />
+        
     </Menu>
   );
 };
